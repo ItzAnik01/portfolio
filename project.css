@@ -1,6 +1,6 @@
-/* =========================================
+/* =====================================================
    RESET
-========================================= */
+===================================================== */
 
 * {
     margin: 0;
@@ -10,109 +10,103 @@
 }
 
 
-/* =========================================
+/* =====================================================
    HTML
-========================================= */
+===================================================== */
 
 html {
     scroll-behavior: smooth;
 }
 
 
-/* =========================================
+/* =====================================================
    BODY
-========================================= */
+===================================================== */
 
 body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+
+    color: #e5e7eb;
 
     background:
         radial-gradient(
             circle at top left,
-            #1e3a8a22,
+            rgba(30, 58, 138, 0.13),
             transparent 30%
         ),
-
         radial-gradient(
             circle at bottom right,
-            #7c3aed22,
+            rgba(124, 58, 237, 0.13),
             transparent 30%
         ),
-
         linear-gradient(
             180deg,
-            #020617,
+            #020617 0%,
             #020617 60%,
-            #030712
+            #030712 100%
         );
-
-    color: #e5e7eb;
-
-    min-height: 100vh;
-
-    overflow-x: hidden;
-
-    position: relative;
 }
 
 
-/* =========================================
-   BACKGROUND SYMBOLS
-========================================= */
+/* =====================================================
+   BACKGROUND CODE SYMBOLS
+===================================================== */
 
 body::before {
-
     content: "</> {} [] () =>";
 
     position: fixed;
 
-    inset: 0;
+    top: 50%;
+    left: 50%;
 
-    display: flex;
+    transform: translate(-50%, -50%);
 
-    align-items: center;
+    width: 100%;
 
-    justify-content: center;
+    text-align: center;
 
     font-size: 110px;
-
     font-weight: 700;
 
-    color: rgba(255, 255, 255, 0.02);
-
     letter-spacing: 35px;
+
+    color: rgba(255, 255, 255, 0.018);
 
     pointer-events: none;
 
     z-index: 0;
 
-    animation: floatBg 6s linear infinite;
+    white-space: nowrap;
+
+    animation: floatBg 6s ease-in-out infinite;
 }
 
 
 @keyframes floatBg {
 
     0% {
-        transform: translateY(0px) rotate(0deg);
+        transform: translate(-50%, -50%);
     }
 
     50% {
-        transform: translateY(-20px) rotate(1deg);
+        transform: translate(-50%, calc(-50% - 20px));
     }
 
     100% {
-        transform: translateY(0px) rotate(0deg);
+        transform: translate(-50%, -50%);
     }
 }
 
 
-/* =========================================
+/* =====================================================
    PROJECT SECTION
-========================================= */
+===================================================== */
 
 .projects-section {
-
     width: 100%;
-
     min-height: 100vh;
 
     padding: 70px 7%;
@@ -123,11 +117,12 @@ body::before {
 }
 
 
-/* =========================================
+/* =====================================================
    TITLE
-========================================= */
+===================================================== */
 
 .section-title {
+    width: 100%;
 
     text-align: center;
 
@@ -136,12 +131,11 @@ body::before {
 
 
 .section-title h1 {
+    margin: 0;
 
     font-size: 52px;
-
     font-weight: 700;
-
-    margin: 0;
+    line-height: 1.2;
 
     background:
         linear-gradient(
@@ -152,10 +146,9 @@ body::before {
         );
 
     -webkit-background-clip: text;
+    background-clip: text;
 
     -webkit-text-fill-color: transparent;
-
-    background-clip: text;
 
     animation: whiteGlow 2s ease-in-out infinite;
 }
@@ -164,34 +157,37 @@ body::before {
 @keyframes whiteGlow {
 
     0% {
-        filter: drop-shadow(
-            0 0 5px rgba(96, 165, 250, 0.2)
-        );
+        filter:
+            drop-shadow(
+                0 0 5px
+                rgba(96, 165, 250, 0.2)
+            );
     }
 
     50% {
-        filter: drop-shadow(
-            0 0 15px rgba(167, 139, 250, 0.5)
-        );
+        filter:
+            drop-shadow(
+                0 0 15px
+                rgba(167, 139, 250, 0.5)
+            );
     }
 
     100% {
-        filter: drop-shadow(
-            0 0 5px rgba(52, 211, 153, 0.2)
-        );
+        filter:
+            drop-shadow(
+                0 0 5px
+                rgba(52, 211, 153, 0.2)
+            );
     }
 }
 
 
-/* =========================================
+/* =====================================================
    PROJECT GRID
-
-   IMPORTANT:
-   Each .project-card is now one complete
-   grid item.
-========================================= */
+===================================================== */
 
 .projects-grid {
+    width: 100%;
 
     display: grid;
 
@@ -203,15 +199,17 @@ body::before {
 
     gap: 24px;
 
-    width: 100%;
+    align-items: stretch;
 }
 
 
-/* =========================================
+/* =====================================================
    PROJECT CARD
-========================================= */
+===================================================== */
 
 .project-card {
+    width: 100%;
+    min-width: 0;
 
     position: relative;
 
@@ -219,17 +217,15 @@ body::before {
 
     flex-direction: column;
 
-    min-width: 0;
-
     background:
         linear-gradient(
             145deg,
-            rgba(30, 41, 59, 0.9),
-            rgba(15, 23, 42, 0.95)
+            rgba(30, 41, 59, 0.94),
+            rgba(15, 23, 42, 0.97)
         );
 
     border: 1px solid
-        rgba(255, 255, 255, 0.06);
+        rgba(255, 255, 255, 0.08);
 
     border-radius: 20px;
 
@@ -237,9 +233,8 @@ body::before {
 
     overflow: hidden;
 
-    backdrop-filter: blur(10px);
-
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 
     transition:
         transform 0.25s ease,
@@ -248,68 +243,67 @@ body::before {
 }
 
 
-/* CARD BORDER COLORS */
+/* =====================================================
+   CARD BORDER COLORS
+===================================================== */
 
 .project-card:nth-child(3n + 1) {
-
     border-color:
-        rgba(96, 165, 250, 0.25);
+        rgba(96, 165, 250, 0.30);
 }
 
 
 .project-card:nth-child(3n + 2) {
-
     border-color:
-        rgba(167, 139, 250, 0.25);
+        rgba(167, 139, 250, 0.30);
 }
 
 
 .project-card:nth-child(3n + 3) {
-
     border-color:
-        rgba(52, 211, 153, 0.25);
+        rgba(52, 211, 153, 0.30);
 }
 
 
-/* CARD HOVER */
+/* =====================================================
+   CARD HOVER
+===================================================== */
 
 .project-card:hover {
-
     transform: translateY(-6px);
 
     box-shadow:
-        0 15px 35px rgba(0, 0, 0, 0.45);
+        0 15px 35px
+        rgba(0, 0, 0, 0.45);
 }
 
 
-/* =========================================
+/* =====================================================
    CARD GLOW
-========================================= */
+===================================================== */
 
 .card-glow {
-
     position: absolute;
 
     width: 170px;
-
     height: 170px;
+
+    top: -80px;
+    right: -80px;
 
     border-radius: 50%;
 
-    top: -80px;
-
-    right: -80px;
-
     pointer-events: none;
 
+    z-index: 0;
+
     animation:
-        glowMove 3s linear infinite;
+        glowMove 3s ease-in-out infinite;
 }
 
 
 .project-card:nth-child(3n + 1)
 .card-glow {
-
     background:
         rgba(59, 130, 246, 0.16);
 }
@@ -317,7 +311,6 @@ body::before {
 
 .project-card:nth-child(3n + 2)
 .card-glow {
-
     background:
         rgba(168, 85, 247, 0.16);
 }
@@ -325,7 +318,6 @@ body::before {
 
 .project-card:nth-child(3n + 3)
 .card-glow {
-
     background:
         rgba(16, 185, 129, 0.16);
 }
@@ -347,21 +339,22 @@ body::before {
 }
 
 
-/* =========================================
+/* =====================================================
    PROJECT HEADER
-========================================= */
+===================================================== */
 
 .project-header {
+    width: 100%;
 
     display: flex;
 
-    justify-content: space-between;
-
     align-items: flex-start;
+
+    justify-content: space-between;
 
     gap: 15px;
 
-    margin-bottom: 15px;
+    margin-bottom: 16px;
 
     position: relative;
 
@@ -370,27 +363,26 @@ body::before {
 
 
 .project-header > div {
+    flex: 1;
 
     min-width: 0;
 }
 
 
 .project-header h2 {
+    color: #ffffff;
 
     font-size: 18px;
 
+    font-weight: 600;
+
     line-height: 1.4;
 
-    margin-bottom: 5px;
-
-    color: #ffffff;
-
-    word-break: normal;
+    margin: 0 0 5px 0;
 }
 
 
 .updated {
-
     color: #9ca3af;
 
     font-size: 10px;
@@ -399,11 +391,19 @@ body::before {
 }
 
 
-/* =========================================
+/* =====================================================
    STATUS
-========================================= */
+===================================================== */
 
 .status {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    height: fit-content;
 
     padding: 5px 10px;
 
@@ -413,35 +413,34 @@ body::before {
 
     font-weight: 600;
 
-    height: fit-content;
+    position: relative;
 
-    flex-shrink: 0;
+    z-index: 3;
 }
 
 
 .live {
+    color: #22c55e;
 
     background:
         rgba(34, 197, 94, 0.15);
-
-    color: #22c55e;
 }
 
 
 .code-only {
+    color: #fbbf24;
 
     background:
         rgba(251, 191, 36, 0.15);
-
-    color: #fbbf24;
 }
 
 
-/* =========================================
+/* =====================================================
    DESCRIPTION
-========================================= */
+===================================================== */
 
 .description {
+    width: 100%;
 
     color: #cbd5e1;
 
@@ -449,9 +448,9 @@ body::before {
 
     line-height: 1.7;
 
-    margin-bottom: 18px;
+    margin: 0 0 18px 0;
 
-    min-height: 61px;
+    min-height: 60px;
 
     position: relative;
 
@@ -459,19 +458,22 @@ body::before {
 }
 
 
-/* =========================================
-   TECHNOLOGY TOPICS
-========================================= */
+/* =====================================================
+   TECHNOLOGY TAGS
+===================================================== */
 
 .topics {
+    width: 100%;
 
     display: flex;
 
     flex-wrap: wrap;
 
+    align-items: center;
+
     gap: 7px;
 
-    margin-bottom: 20px;
+    margin: 0 0 20px 0;
 
     position: relative;
 
@@ -480,43 +482,53 @@ body::before {
 
 
 .topics span {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
 
     padding: 6px 10px;
 
     border-radius: 30px;
 
-    background:
-        rgba(255, 255, 255, 0.05);
-
-    border:
-        1px solid rgba(255, 255, 255, 0.08);
-
     color: #cbd5e1;
 
     font-size: 10px;
 
+    line-height: 1;
+
     white-space: nowrap;
 
-    transition: 0.2s ease;
+    background:
+        rgba(255, 255, 255, 0.05);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.08);
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        color 0.2s ease;
 }
 
 
 .topics span:hover {
-
     transform: scale(1.08);
+
+    color: #60a5fa;
 
     background:
         rgba(37, 99, 235, 0.13);
-
-    color: #60a5fa;
 }
 
 
-/* =========================================
+/* =====================================================
    BUTTON CONTAINER
-========================================= */
+===================================================== */
 
 .project-buttons {
+    width: 100%;
 
     display: flex;
 
@@ -530,15 +542,14 @@ body::before {
 }
 
 
-/* =========================================
-   ALL BUTTONS
-========================================= */
+/* =====================================================
+   BUTTONS
+===================================================== */
 
 .project-buttons a {
-
     flex: 1;
 
-    min-width: 0;
+    width: 50%;
 
     height: 40px;
 
@@ -558,15 +569,22 @@ body::before {
 
     font-weight: 500;
 
-    transition: 0.2s ease;
+    white-space: nowrap;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
 }
 
 
-/* =========================================
-   RUN BUTTON
-========================================= */
+/* =====================================================
+   RUN PROJECT BUTTON
+===================================================== */
 
 .run-btn {
+    color: #ffffff;
 
     background:
         linear-gradient(
@@ -574,13 +592,10 @@ body::before {
             #2563eb,
             #7c3aed
         );
-
-    color: #ffffff;
 }
 
 
 .run-btn:hover {
-
     transform: translateY(-3px);
 
     box-shadow:
@@ -589,39 +604,39 @@ body::before {
 }
 
 
-/* =========================================
-   CODE BUTTON
-========================================= */
+/* =====================================================
+   VIEW CODE BUTTON
+===================================================== */
 
 .code-btn {
-
-    border:
-        1px solid rgba(255, 255, 255, 0.1);
+    color: #e5e7eb;
 
     background:
         rgba(255, 255, 255, 0.03);
 
-    color: #e5e7eb;
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.10);
 }
 
 
 .code-btn:hover {
-
-    border-color: #60a5fa;
+    transform: translateY(-3px);
 
     color: #60a5fa;
 
-    background: #0f172a;
+    border-color: #60a5fa;
 
-    transform: translateY(-3px);
+    background: #0f172a;
 }
 
 
-/* =========================================
+/* =====================================================
    ERROR BOX
-========================================= */
+===================================================== */
 
 .error-box {
+    width: 100%;
 
     padding: 25px;
 
@@ -629,30 +644,28 @@ body::before {
 
     border-radius: 16px;
 
+    color: #ef4444;
+
     background:
         rgba(239, 68, 68, 0.08);
 
     border:
-        1px solid rgba(239, 68, 68, 0.15);
-
-    color: #ef4444;
+        1px solid
+        rgba(239, 68, 68, 0.15);
 }
 
 
-/* =========================================
+/* =====================================================
    TABLET
-========================================= */
+===================================================== */
 
 @media (max-width: 900px) {
 
     .projects-section {
-
-        padding:
-            60px 5%;
+        padding: 60px 5%;
     }
 
     .projects-grid {
-
         grid-template-columns:
             repeat(2, minmax(280px, 1fr));
     }
@@ -660,41 +673,35 @@ body::before {
 }
 
 
-/* =========================================
+/* =====================================================
    MOBILE
-========================================= */
+===================================================== */
 
 @media (max-width: 650px) {
 
     body::before {
-
         font-size: 60px;
 
         letter-spacing: 15px;
     }
 
 
-    .section-title {
+    .projects-section {
+        padding: 50px 5%;
+    }
 
+
+    .section-title {
         margin-bottom: 35px;
     }
 
 
     .section-title h1 {
-
         font-size: 38px;
     }
 
 
-    .projects-section {
-
-        padding:
-            50px 5%;
-    }
-
-
     .projects-grid {
-
         grid-template-columns: 1fr;
 
         gap: 18px;
@@ -702,32 +709,27 @@ body::before {
 
 
     .project-card {
-
         padding: 20px;
     }
 
 
     .project-header {
-
         flex-direction: row;
     }
 
 
     .project-header h2 {
-
         font-size: 17px;
     }
 
 
     .project-buttons {
-
         flex-direction: row;
     }
 
 
     .project-buttons a {
-
-        height: 40px;
+        width: 50%;
 
         font-size: 11px;
     }
@@ -735,32 +737,28 @@ body::before {
 }
 
 
-/* =========================================
-   SMALL MOBILE
-========================================= */
+/* =====================================================
+   VERY SMALL MOBILE
+===================================================== */
 
 @media (max-width: 400px) {
 
     .project-header {
-
         flex-direction: column;
     }
 
 
     .status {
-
         align-self: flex-start;
     }
 
 
     .project-buttons {
-
         flex-direction: column;
     }
 
 
     .project-buttons a {
-
         width: 100%;
     }
 
