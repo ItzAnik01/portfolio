@@ -1,148 +1,490 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
   <title>Anik Projects</title>
 
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
 
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- Your CSS -->
   <link rel="stylesheet" href="project.css">
+
 </head>
+
 
 <body>
 
-<section class="projects-section">
 
-  <div class="section-title">
-    
-    <h1>Projects</h1>
-   
-  </div>
+  <!-- =========================
+       PROJECTS SECTION
+  ========================== -->
 
-  <div id="projects-container" class="projects-grid"></div>
+  <section class="projects-section">
 
-</section>
+    <div class="section-title">
 
-<script>
+      <h1>Projects</h1>
 
-const username = "ItzAnik01";
-const container = document.getElementById("projects-container");
+    </div>
 
-async function loadProjects() {
 
-  try {
+    <!-- Projects will be inserted here -->
 
-    const response = await fetch(
-      `https://api.github.com/users/${username}/repos?sort=updated&per_page=100`
-    );
+    <div
+      id="projects-container"
+      class="projects-grid"
+    ></div>
 
-    const repos = await response.json();
+  </section>
 
-    container.innerHTML = "";
 
-    repos.forEach(async (repo) => {
 
-      if (repo.fork) return;
+  <!-- =========================
+       JAVASCRIPT
+  ========================== -->
 
-      let topics = [];
+  <script>
+
+    /*
+     * GitHub username
+     */
+
+    const username = "ItzAnik01";
+
+
+    /*
+     * Project container
+     */
+
+    const container =
+      document.getElementById("projects-container");
+
+
+
+    /*
+     * GitHub Personal Access Token
+     *
+     * IMPORTANT:
+     * Do NOT put your real token in a
+     * public website.
+     *
+     * This is only for local testing.
+     */
+
+    const GITHUB_TOKEN = "YOUR_GITHUB_TOKEN";
+
+
+
+    /*
+     * Load ONLY pinned repositories
+     */
+
+    async function loadProjects() {
 
       try {
 
-        const topicRes = await fetch(
-          `https://api.github.com/repos/${username}/${repo.name}/topics`,
-          {
-            headers: {
-              Accept: "application/vnd.github.mercy-preview+json"
+
+        /*
+         * GitHub GraphQL query
+         *
+         * pinnedItems()
+         * returns repositories pinned
+         * on your GitHub profile.
+         */
+
+        const query = `
+
+          query {
+
+            user(login: "${username}") {
+
+              pinnedItems(
+                first: 6
+                types: REPOSITORY
+              ) {
+
+                nodes {
+
+                  ... on Repository {
+
+                    name
+
+                    description
+
+                    updatedAt
+
+                    homepageUrl
+
+                    url
+
+                    repositoryTopics(first: 10) {
+
+                      nodes {
+
+                        topic {
+
+                          name
+
+                        }
+
+                      }
+
+                    }
+
+                  }
+
+                }
+
+              }
+
             }
+
+          }
+
+        `;
+
+
+
+        /*
+         * Send request to GitHub GraphQL API
+         */
+
+        const response = await fetch(
+          "https://api.github.com/graphql",
+          {
+
+            method: "POST",
+
+            headers: {
+
+              "Content-Type":
+                "application/json",
+
+              "Authorization":
+                `Bearer ${GITHUB_TOKEN}`
+
+            },
+
+            body: JSON.stringify({
+
+              query: query
+
+            })
+
           }
         );
 
-        const topicData = await topicRes.json();
-        topics = topicData.names || [];
 
-      } catch (err) {
-        console.log("No topics found");
-      }
 
-      const liveLink =
-        repo.homepage && repo.homepage.trim() !== ""
-          ? repo.homepage
-          : `https://${username}.github.io/${repo.name}`;
+        /*
+         * Convert response to JSON
+         */
 
-      const card = document.createElement("div");
-      card.className = "project-card";
+        const data =
+          await response.json();
 
-      card.innerHTML = `
 
-        <div class="card-glow"></div>
 
-        <div class="project-header">
+        /*
+         * Check for GitHub API errors
+         */
 
-          <div>
-            <h2>${repo.name}</h2>
+        if (data.errors) {
 
-            <p class="updated">
-              Updated: ${new Date(repo.updated_at).toLocaleDateString()}
+          console.error(
+            data.errors
+          );
+
+          throw new Error(
+            data.errors[0].message
+          );
+
+        }
+
+
+
+        /*
+         * Get pinned repositories
+         */
+
+        const repos =
+          data.data.user.pinnedItems.nodes;
+
+
+
+        /*
+         * Clear loading content
+         */
+
+        container.innerHTML = "";
+
+
+
+        /*
+         * If no pinned repositories
+         */
+
+        if (!repos || repos.length === 0) {
+
+          container.innerHTML = `
+
+            <div class="error-box">
+
+              No pinned projects found.
+
+            </div>
+
+          `;
+
+          return;
+
+        }
+
+
+
+        /*
+         * Create project card
+         * for every pinned repository
+         */
+
+        repos.forEach(repo => {
+
+
+          /*
+           * Get repository topics
+           */
+
+          const topics =
+            repo.repositoryTopics.nodes.map(
+              item => item.topic.name
+            );
+
+
+
+          /*
+           * Determine live project URL
+           */
+
+          const liveLink =
+            repo.homepageUrl &&
+            repo.homepageUrl.trim() !== ""
+
+              ? repo.homepageUrl
+
+              : `https://${username}.github.io/${repo.name}`;
+
+
+
+          /*
+           * Create card
+           */
+
+          const card =
+            document.createElement("div");
+
+
+
+          card.className =
+            "project-card";
+
+
+
+          /*
+           * Project card HTML
+           */
+
+          card.innerHTML = `
+
+            <div class="card-glow"></div>
+
+
+            <div class="project-header">
+
+              <div>
+
+                <h2>
+                  ${repo.name}
+                </h2>
+
+
+                <p class="updated">
+
+                  Updated:
+                  ${new Date(
+                    repo.updatedAt
+                  ).toLocaleDateString()}
+
+                </p>
+
+              </div>
+
+
+              <span
+                class="status ${
+                  repo.homepageUrl
+                    ? "live"
+                    : "code-only"
+                }"
+              >
+
+                ${
+                  repo.homepageUrl
+                    ? "LIVE"
+                    : "CODE"
+                }
+
+              </span>
+
+            </div>
+
+
+
+            <p class="description">
+
+              ${
+                repo.description ||
+                "No description available for this project."
+              }
+
             </p>
+
+
+
+            <div class="topics">
+
+              ${
+                topics.length > 0
+
+                  ? topics
+                      .map(
+                        topic =>
+                          `<span>${topic}</span>`
+                      )
+                      .join("")
+
+                  : `<span>github-project</span>`
+              }
+
+            </div>
+
+
+
+            <div class="project-buttons">
+
+
+              <!-- Run Project -->
+
+              <a
+                href="${liveLink}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="run-btn"
+              >
+
+                ▶ Run Project
+
+              </a>
+
+
+
+              <!-- GitHub Repository -->
+
+              <a
+                href="${repo.url}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="code-btn"
+              >
+
+                View Code
+
+              </a>
+
+
+            </div>
+
+          `;
+
+
+
+          /*
+           * Add card to page
+           */
+
+          container.appendChild(card);
+
+        });
+
+
+      } catch (error) {
+
+
+        /*
+         * Show error in console
+         */
+
+        console.error(
+          "GitHub Error:",
+          error
+        );
+
+
+
+        /*
+         * Show error on page
+         */
+
+        container.innerHTML = `
+
+          <div class="error-box">
+
+            Failed to load pinned GitHub projects.
+
+            <br>
+
+            Please check your GitHub API configuration.
+
           </div>
 
-          <span class="status ${repo.homepage ? 'live' : 'code-only'}">
-            ${repo.homepage ? 'LIVE' : 'CODE'}
-          </span>
+        `;
 
-        </div>
+      }
 
-        <p class="description">
-          ${repo.description || "No description available for this project."}
-        </p>
+    }
 
-        <div class="topics">
 
-          ${
-            topics.length > 0
-              ? topics.map(topic => `<span>${topic}</span>`).join("")
-              : `<span>github-project</span>`
-          }
 
-        </div>
+    /*
+     * Start loading projects
+     */
 
-        <div class="project-buttons">
+    loadProjects();
 
-          <a href="${liveLink}" target="_blank" class="run-btn">
-            ▶ Run Project
-          </a>
+  </script>
 
-          <a href="${repo.html_url}" target="_blank" class="code-btn">
-            View Code
-          </a>
-
-        </div>
-
-      `;
-
-      container.appendChild(card);
-
-    });
-
-  } catch (error) {
-
-    console.log(error);
-
-    container.innerHTML = `
-      <div class="error-box">
-        Failed to load GitHub projects.
-      </div>
-    `;
-  }
-}
-
-loadProjects();
-
-</script>
 
 </body>
+
 </html>
+```
